@@ -1,34 +1,30 @@
 const readline = require("readline");
 
 const rl = readline.createInterface({
-    input:process.stdin,
-    output:process.stdout,
-})
+  input: process.stdin,
+  output: process.stdout,
+});
 
 let input = [];
+let count = 0;
 
 function lineHandler(line) {
-    input.push(line);
+  count++;
+  input.push(line);
+  const number = Number(input[0]);
+
+  if (count === number + 1) {
+    rl.close();
+  }
 }
 
 function closeHandler() {
-    const num = Number(input[0]);
-    let count = 0;
+  for (let i = 1; i < count; i++) {
+    const strArray = input[i].split("");
+  }
 
-    for(let i = 1; i < input.length; i++) {
-        const string = input[i].split('');
-        
-        for(let j = 0; j < string.length; j++) {
-            for(let k = j+2; k < string.length; k ++) {
-                if((string[j] !== string[j+1]) 3&& (string[j] === string[k])) {
-                    count --;
-                    break;
-                }
-            } break;
-        }
-    }
-    console.log(num + count);
-    process.exit();
+  process.exit();
 }
+
 rl.on("line", lineHandler);
 rl.on("close", closeHandler);
