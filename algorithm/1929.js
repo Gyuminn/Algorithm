@@ -59,7 +59,7 @@ function isPrime(min, max) {
   // 즉 인덱스 번호 0과 1은 사용하지 않는다. (밑에서 i가 2부터 시작)
 
   for (let i = 2; i <= Math.ceil(Math.sqrt(max)); i++) {
-    // 약수를 찾을 때는 가운데 약수(제곱근)까지만 구하면 된다.
+    // 제곱근까지만 검사해서 그 배수들만 지워주어도 충분하다.
     if (primeArr[i]) {
       // primeArr[i]가 true 라면 i 이후의 i 배수는 약수로 i를 가지고 있다.
       // 따라서 i 이후의 i 배수에 대해 false값을 준다.
