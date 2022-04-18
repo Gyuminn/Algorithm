@@ -53,6 +53,7 @@ function lineHandler(line) {
 
 function isPrime(min, max) {
   const primeArr = Array(max + 1).fill(true);
+  primeArr[1] = false;
 
   // 2부터 n까지 n-1 개를 저장할 수 있는 배열 할당
   // 배열 참조 번호와 소수와 일치하도록 배열의 크기는 n+1 길이만큼 할당
