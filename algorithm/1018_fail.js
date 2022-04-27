@@ -62,22 +62,22 @@ const compareChess = () => {
         board[k] = board[k].slice(j, 8 + j);
       }
 
-      //   for (let l = 0; l < 64; l++) {
-      //     let countBlack = 0;
-      //     let countWhite = 0;
-      //     const testArr = board.join().split(",");
-      //     if (testArr[l] !== chessBlack[l]) {
-      //       countBlack++;
-      //     } else if (testArr[l] !== chessWhite[l]) {
-      //       countWhite++;
-      //     }
-      //     answers.push(countBlack);
-      //     answers.push(countWhite);
-      //   }
+      for (let l = 0; l < 64; l++) {
+        let countBlack = 0;
+        let countWhite = 0;
+        const testArr = board.join().split(",");
+        if (testArr[l] !== chessBlack[l]) {
+          countBlack++;
+        } else if (testArr[l] !== chessWhite[l]) {
+          countWhite++;
+        }
+        answers.push(countBlack);
+        answers.push(countWhite);
+      }
       console.table(board);
     }
   }
-  //   console.log(answers.sort((a, b) => a - b)[0]);
+  console.log(answers.sort((a, b) => a - b)[0]);
 };
 
 const closeHandler = () => {
