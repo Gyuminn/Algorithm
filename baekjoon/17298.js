@@ -20,19 +20,23 @@ const lineHandler = (line) => {
 };
 
 const getNGE = (N, A) => {
+  // stack은 원소의 인덱스를 넣어주는 목적으로 사용
   const stack = [];
+  const answer = [];
 
-  for (let i = 0; i < N; i++) {
-    while (stack.length && Number(A[i]) > Number(A[stack[stack.length - 1]])) {
-      A[stack.pop()] = A[i];
+  // 처음 스택에는 0이 들어가있다.
+  stack.push(0);
+  for (let i = 1; i < N; i++) {
+    while (stack.length && A[i] > A[stack[stack.length - 1]]) {
+      answer[stack.pop()] = A[i];
     }
     stack.push(i);
   }
 
   while (stack.length) {
-    A[stack.pop()] = -1;
+    answer[stack.pop()] = -1;
   }
-  console.log(A.join(" ").trim());
+  console.log(answer.join(" "));
 };
 const closeHandler = () => {
   process.exit();
