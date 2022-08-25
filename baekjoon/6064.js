@@ -20,19 +20,23 @@ const lineHandler = (line) => {
 const solution = (n, arr) => {
   let answer = [];
   for (let i = 0; i < n; i++) {
-    const [M, N, x, y] = arr[i];
-    const lastYear = getLCM(N, M);
+    const [M, N, X, Y] = arr[i];
+    const lastYear = getLCM(M, N);
 
-    let year = 1;
+    let x = X;
+    let y = Y;
+
     while (1) {
-      if (year > lastYear) {
+      if (x > lastYear || y > lastYear) {
         answer.push(-1);
         break;
-      } else if ((year - x) % M === 0 && (year - y) % N === 0) {
-        answer.push(year);
-        break;
+      } else if (x > y) {
+        y += N;
+      } else if (x < y) {
+        x += M;
       } else {
-        year++;
+        answer.push(x);
+        break;
       }
     }
   }
