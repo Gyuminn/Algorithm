@@ -13,6 +13,7 @@ const lineHandler = (line) => {
 
 const solution = (n) => {
   let answer = 0;
+  // i =1 일때는 1의 자리 숫자 개수, i = 10일 때는 10의 자리 숫자 개수,,,
   for (let i = 1; i <= n; i *= 10) {
     answer += n - i + 1;
   }
