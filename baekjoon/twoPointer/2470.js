@@ -25,6 +25,10 @@ const lineHandler = (line) => {
       if (absSum < tempSum) {
         tempSum = absSum;
         answer = [arr[startP], arr[endP]];
+
+        if (sum === 0) {
+          break;
+        }
       }
 
       if (sum < 0) {
