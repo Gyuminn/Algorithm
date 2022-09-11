@@ -7,32 +7,27 @@ const rl = readline.createInterface({
 
 const lineHandler = (line) => {
   const [N, M] = line.split(" ").map((v) => +v);
-  const visited = new Array(N);
+  const visited = Array.from({ length: N + 1 }, () => 0);
+  const tmp = Array.from({ length: M }, () => 0);
   const answer = [];
-  let result = "";
 
-  const DFS = (idx, cnt) => {
-    if (cnt === M) {
-      result += `${answer.join(" ")}\n`;
-      return;
-    }
-
-    for (let i = idx; i < N; i++) {
-      if (visited[i] === true) continue;
-      visited[i] = true;
-      answer.push(i + 1);
-      DFS(i, cnt + 1, result);
-      answer.pop();
-      visited[i] = false;
+  const DFS = (L, idx) => {
+    if (L === M) {
+      answer.push(tmp.slice());
+    } else {
+      for (let i = idx; i <= N; i++) {
+        if (visited[i] === 0) {
+          visited[i] = 1;
+          tmp[L] = i;
+          DFS(L + 1, i);
+          visited[i] = 0;
+        }
+      }
     }
   };
-  DFS(0, 0);
-  console.log(result);
-  rl.close();
-};
-
-const closeHandler = () => {
+  DFS(0, 1);
+  console.log(answer.map((v) => v.join(" ")).join(`\n`));
   process.exit();
 };
+
 rl.on("line", lineHandler);
-rl.on("close", closeHandler);
