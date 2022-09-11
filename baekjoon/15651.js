@@ -7,24 +7,22 @@ const rl = readline.createInterface({
 
 const lineHandler = (line) => {
   const [N, M] = line.split(" ").map((v) => +v);
-  const result = [];
-  let answer = "";
+  const tmp = Array.from({ length: M }, () => 0);
+  const answer = [];
 
-  const DFS = (v) => {
-    if (v === M) {
-      answer += `${result.join(" ")}\n`;
-      return;
-    }
-
-    for (let i = 0; i < N; i++) {
-      result.push(i + 1);
-      DFS(result.length);
-      result.pop();
+  const DFS = (L) => {
+    if (L === M) {
+      answer.push(tmp.slice());
+    } else {
+      for (let i = 1; i <= N; i++) {
+        tmp[L] = i;
+        DFS(L + 1);
+      }
     }
   };
+
   DFS(0);
-  console.log(answer.trim());
+  console.log(answer.map((v) => v.join(" ")).join(`\n`));
   process.exit();
 };
-
 rl.on("line", lineHandler);
