@@ -17,11 +17,11 @@ const lineHandler = (line) => {
 
     const answer = [];
 
-    const DFS = (L, idx) => {
+    const DFS = (L, S) => {
       if (L === M) {
         answer.push(tmp.slice());
       } else {
-        for (let i = idx; i < N; i++) {
+        for (let i = S; i < N; i++) {
           tmp[L] = arr[i];
           DFS(L + 1, i);
         }
