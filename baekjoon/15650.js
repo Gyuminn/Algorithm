@@ -11,16 +11,14 @@ const lineHandler = (line) => {
   const tmp = Array.from({ length: M }, () => 0);
   const answer = [];
 
-  const DFS = (L, idx) => {
+  const DFS = (L, S) => {
     if (L === M) {
       answer.push(tmp.slice());
     } else {
-      for (let i = idx; i <= N; i++) {
+      for (let i = S; i <= N; i++) {
         if (visited[i] === 0) {
-          visited[i] = 1;
           tmp[L] = i;
-          DFS(L + 1, i);
-          visited[i] = 0;
+          DFS(L + 1, i + 1);
         }
       }
     }
