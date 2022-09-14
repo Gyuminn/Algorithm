@@ -1,3 +1,4 @@
+// 다음 순열 구하기
 const readine = require("readline");
 
 const rl = readine.createInterface({
