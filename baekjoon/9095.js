@@ -17,11 +17,10 @@ const lineHandler = (line) => {
 };
 
 const getSumCase = (arr) => {
-  const dp = {
-    1: 1,
-    2: 2,
-    3: 4,
-  };
+  const dp = Array.from({ length: 4 }, () => 0);
+  dp[1] = 1;
+  dp[2] = 2;
+  dp[3] = 4;
 
   arr.shift();
   for (let i = 0; i < arr.length; i++) {
