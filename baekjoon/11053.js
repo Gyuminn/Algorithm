@@ -11,17 +11,18 @@ const lineHandler = (line) => {
   input.push(line.split(" ").map((v) => +v));
 
   if (input.length > 1) {
-    console.log(LIS(input[0][0], input[1]));
+    console.log(LIS(input[1]));
     rl.close();
   }
 };
 
-const LIS = (arrLength, arr) => {
+// 최대 부분 증가 수열 풀이
+const LIS = (arr) => {
   let answer = 0;
-  let dp = Array.from({ length: arrLength }, () => 0);
+  let dp = Array.from({ length: arr.Length }, () => 0);
   dp[0] = 1;
 
-  for (let i = 1; i < arrLength; i++) {
+  for (let i = 1; i < arr.Length; i++) {
     let max = 0;
     for (let j = i - 1; j >= 0; j--) {
       if (arr[j] < arr[i] && dp[j] > max) {
