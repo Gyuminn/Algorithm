@@ -27,6 +27,7 @@ const lineHandler = (line) => {
 
     const DFS = (L, start, y, sum) => {
       // 모든 도시를 들렀고(L === N) && 다시 스타트 도시로 온 경우(start === y)
+      // 여기서 start === y 라는 조건을 추가해주는 것이 중요!
       if (L === N && start === y) {
         if (min > sum) min = sum;
         return;
