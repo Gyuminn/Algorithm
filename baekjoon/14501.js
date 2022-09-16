@@ -13,23 +13,18 @@ const lineHandler = (line) => {
   if (input.length > input[0][0]) {
     const [[N], ...arr] = input;
 
-    let max = Number.MIN_SAFE_INTEGER;
+    let max = 0;
+    const DFS = (start, sum) => {
+      if (start > N) return;
 
-    const DFS = (L, S, sum) => {
-      if (!arr[S] || S + arr[S][0] > N) {
-        max = Math.max(max, sum);
-      } else {
-        for (let i = S; i < N; i++) {
-          if (i + arr[i][0] <= N) {
-            sum += arr[i][1];
-            DFS(L + 1, i + arr[i][0], sum);
-            sum -= arr[i][1];
-          }
-        }
+      max = Math.max(max, sum);
+
+      for (let i = start; i < N; i++) {
+        DFS(i + arr[i][0], sum + arr[i][1]);
       }
     };
 
-    DFS(0, 0, 0);
+    DFS(0, 0);
     console.log(max);
     process.exit();
   }
