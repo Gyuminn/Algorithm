@@ -1,12 +1,12 @@
 const sol = (input) => {
   const [[N, M], ...relation] = input;
-  const graph = Array.from(Array(N), () => Array(N).fill(0));
+  const graph = Array.from(Array(N), () => Array());
   const visited = Array.from({ length: N }, () => 0);
   let flag = 0;
 
   for ([a, b] of relation) {
-    graph[a][b] = 1;
-    graph[b][a] = 1;
+    graph[a].push(b);
+    graph[b].push(a);
   }
 
   // 스택이 풀리면서 visited를 초기화해주는 것이 중요하다.
@@ -15,14 +15,14 @@ const sol = (input) => {
   // 이 때 0이 2를 타고 1를 탐색하게 되면, 3은 탐색할 수가 없게 된다.
 
   const DFS = (v, cnt) => {
+    if (flag) return; // 이 부분이 있어야 시간초과가 나지 않음. 그렇지 않으면 flag를 쓸 필요가 없어지는 것임.
     visited[v] = 1;
     if (cnt === 4) {
       flag = 1;
-      return;
     } else {
-      for (let i = 0; i < N; i++) {
-        if (graph[v][i] === 1 && visited[i] === 0) {
-          DFS(i, cnt + 1);
+      for (let i = 0; i < graph[v].length; i++) {
+        if (visited[graph[v][i]] === 0) {
+          DFS(graph[v][i], cnt + 1);
         }
       }
     }
