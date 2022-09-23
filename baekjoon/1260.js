@@ -1,3 +1,5 @@
+// DFS와 BFS 기본
+
 const sol = (input) => {
   const [[N, M, V], ...relation] = input;
 
@@ -10,7 +12,7 @@ const sol = (input) => {
   const BFS_queue = [];
 
   // 인접 리스트 생성 및 오름차순 정렬
-  for ([a, b] of relation) {
+  for (let [a, b] of relation) {
     graph[a].push(b);
     graph[b].push(a);
   }
