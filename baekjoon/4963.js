@@ -1,68 +1,54 @@
-const readline = require("readline");
+function sol(testCase) {
+  const [[w, h], ...board] = testCase;
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+  let answer = 0;
+  const dx = [-1, -1, 0, 1, 1, 1, 0, -1];
+  const dy = [0, 1, 1, 1, 0, -1, -1, -1];
+  const queue = [];
 
-let input = [];
-let N = 0;
-let M = 0;
-rl.on("line", (line) => {
-  if (!N) {
-    if (line === "0 0") {
-      process.exit();
-    }
-    [M, N] = line.split(" ").map(Number);
-  } else {
-    input.push(line);
-    if (input.length === N) {
-      main();
-      N = 0;
-      input = [];
-    }
-  }
-});
-
-const main = () => {
-  const graph = [];
-  const visited = [];
-
-  for (let i = 0; i < N; i++) {
-    graph[i] = input[i].split(" ").map(Number);
-    visited[i] = new Array(M).fill(false);
-  }
-
-  const bfs = (yPos, xPos) => {
-    const xMove = [0, 0, -1, 1, -1, -1, 1, 1];
-    const yMove = [1, -1, 0, 0, 1, -1, 1, -1];
-    const queue = [];
-    queue.push({ yPos: yPos, xPos: xPos });
-    visited[yPos][xPos] = true;
-
-    while (queue.length) {
-      const { yPos, xPos } = queue.shift();
-      for (let i = 0; i < 8; i++) {
-        const nextY = yPos + yMove[i];
-        const nextX = xPos + xMove[i];
-        if (nextY >= 0 && nextY < N && nextX >= 0 && nextX < M) {
-          if (!visited[nextY][nextX] && graph[nextY][nextX]) {
-            visited[nextY][nextX] = true;
-            queue.push({ yPos: nextY, xPos: nextX });
+  for (let i = 0; i < h; i++) {
+    for (let j = 0; j < w; j++) {
+      if (board[i][j] === 1) {
+        board[i][j] = 0;
+        queue.push([i, j]);
+        answer++;
+        while (queue.length) {
+          const [x, y] = queue.shift();
+          for (let k = 0; k < 8; k++) {
+            const nx = x + dx[k];
+            const ny = y + dy[k];
+            if (nx >= 0 && nx < h && ny >= 0 && ny < w && board[nx][ny] === 1) {
+              board[nx][ny] = 0;
+              queue.push([nx, ny]);
+            }
           }
         }
       }
     }
-  };
-
-  let count = 0;
-  for (let i = 0; i < N; i++) {
-    for (let j = 0; j < M; j++) {
-      if (!visited[i][j] && graph[i][j]) {
-        count++;
-        bfs(i, j);
-      }
-    }
   }
-  console.log(count);
+
+  return answer;
+}
+
+const input = [];
+
+const lineHandler = (line) => {
+  input.push(line.split(" ").map((v) => +v));
+
+  if (input[input.length - 1].toString() === "0,0") {
+    input.pop();
+
+    // 여러 개의 테스트 케이스를 분리하여 검사
+    while (input.length) {
+      const testCase = input.splice(0, input[0][1] + 1);
+      console.log(sol(testCase));
+    }
+    process.exit();
+  }
 };
+require("readline")
+  .createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  })
+  .on("line", lineHandler);
