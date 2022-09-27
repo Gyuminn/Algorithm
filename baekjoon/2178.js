@@ -1,40 +1,26 @@
 const sol = (input) => {
   const [[N, M], ...board] = input;
 
-  let dx = [-1, 0, 1, 0];
-  let dy = [0, 1, 0, -1];
+  const dx = [-1, 0, 1, 0];
+  const dy = [0, 1, 0, -1];
+  const queue = [];
+  const dis = Array.from(Array(N), () => Array(M).fill(0));
 
-  let min = Number.MAX_SAFE_INTEGER;
-  let cnt = 1;
-
-  const DFS = (x, y) => {
-    if (x === N - 1 && y === M - 1) {
-      min = Math.min(min, cnt);
-    } else {
-      for (let k = 0; k < 4; k++) {
-        let nx = x + dx[k];
-        let ny = y + dy[k];
-
-        if (
-          nx >= 0 &&
-          nx <= N - 1 &&
-          ny >= 0 &&
-          ny <= M - 1 &&
-          board[nx][ny] === 1
-        ) {
-          board[nx][ny] = 0;
-          cnt++;
-          DFS(nx, ny);
-          cnt--;
-          board[nx][ny] = 1;
-        }
+  board[0][0] = 1;
+  dis[0][0] = 1;
+  queue.push([0, 0]);
+  while (queue.length) {
+    const [x, y] = queue.shift();
+    for (let k = 0; k < 4; k++) {
+      const [nx, ny] = [x + dx[k], y + dy[k]];
+      if (nx >= 0 && nx < N && ny >= 0 && ny < M && board[nx][ny] === 1) {
+        board[nx][ny] = 0;
+        dis[nx][ny] = dis[x][y] + 1;
+        queue.push([nx, ny]);
       }
     }
-  };
-
-  board[0][0] = 0;
-  DFS(0, 0);
-  return min;
+  }
+  return dis[N - 1][M - 1];
 };
 
 const input = [];
