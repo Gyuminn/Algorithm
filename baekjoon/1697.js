@@ -1,30 +1,35 @@
-const sol = (input) => {
-    const [N, K] = input.split(" ").map(Number);
-    const visit = Array.from({ length: 100100 }, () => 0);
-  
-    function BFS(N) {
-      const queue = [];
-      queue.push([N, 0]);
-      visit[N] = 1;
-      while (queue.length) {
-        const [cur, time] = queue.shift();
-        if (cur === K) return time;
-        for (next of [cur - 1, cur + 1, cur * 2]) {
-          if (!visit[next] && next >= 0 && next <= 100000) {
-            visit[next] = 1;
-            queue.push([next, time + 1]);
-          }
-        }
+function sol(N, K) {
+  const visited = Array.from({ length: 100001 }, () => 0);
+  const dis = Array.from({ length: 100001 }, () => 0);
+  const queue = [];
+  let answer = 0;
+
+  visited[N] = 1;
+  queue.push(N);
+  dis[N] = 0;
+  while (queue.length) {
+    if (N === K) return answer;
+    const x = queue.shift();
+    for (let nx of [x - 1, x + 1, 2 * x]) {
+      if (nx === K) return dis[x] + 1;
+      if (nx > 0 && nx <= 1000000 && visited[nx] === 0) {
+        visited[nx] = 1;
+        queue.push(nx);
+        dis[nx] = dis[x] + 1;
       }
     }
-    return BFS(N);
-  };
-  
-  require("readline")
-    .createInterface(process.stdin, process.stdout)
-    .on("line", (line) => {
-      console.log(sol(line));
-    })
-    .on("close", () => {
-      process.exit();
-    });
+  }
+}
+
+const lineHandler = (line) => {
+  const [N, K] = line.split(" ").map((v) => +v);
+
+  console.log(sol(N, K));
+  process.exit();
+};
+require("readline")
+  .createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  })
+  .on("line", lineHandler);
