@@ -1,8 +1,8 @@
 const sol = (input) => {
-  const [[N, _, M], ...board] = input;
+  const [[M, _, N], ...board] = input;
 
   const BFS = (sx, sy) => {
-    const visited = Array.from(Array(M), () => Array(N).fill(0));
+    const visited = Array.from(Array(N), () => Array(M).fill(0));
     const dx = [-1, 0, 1, 0];
     const dy = [0, 1, 0, -1];
 
@@ -12,18 +12,18 @@ const sol = (input) => {
 
     while (deque.length) {
       const [x, y, cnt] = deque.shift();
-      if (x === M - 1 && y === N - 1) return cnt;
+      if (x === N - 1 && y === M - 1) return cnt;
 
       for (let k = 0; k < 4; k++) {
         const [nx, ny] = [x + dx[k], y + dy[k]];
-        if (nx >= 0 && nx < M && ny >= 0 && ny < N && visited[nx][ny] === 0) {
+        // 아래와 같은 방식으로 풀면 visited[nx][nx] 에서 -1을 참조하기 때문에
+        // 런타임 에러가 발생한다...
+        if (nx >= 0 && ny >= 0 && nx < N && ny < M && visited[nx][ny] === 0) {
           visited[nx][ny] = 1;
           if (board[nx][ny] === 1) {
-            // 벽을 부수는 과정
             board[nx][ny] = 0;
             deque.push([nx, ny, cnt + 1]);
           } else {
-            // 0이라면 우선 순위가 높기 때문에(최소한의 벽을 부수기 위해) unshift로 넣어줌.
             deque.unshift([nx, ny, cnt]);
           }
         }
