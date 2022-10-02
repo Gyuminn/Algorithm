@@ -8,24 +8,55 @@ const sol = (input) => {
   let group = 0;
   let home = 0;
 
-  const DFS = (x, y) => {
-    home += 1;
-    board[x][y] = 0;
+  //   const DFS = (x, y) => {
+  //     home++;
+  //     board[x][y] = 0;
 
-    for (let k = 0; k < 4; k++) {
-      const [nx, ny] = [x + dx[k], y + dy[k]];
-      if (nx >= 0 && nx < N && ny >= 0 && ny < N && board[nx][ny] === 1) {
-        DFS(nx, ny);
+  //     for (let k = 0; k < 4; k++) {
+  //       const [nx, ny] = [x + dx[k], y + dy[k]];
+  //       if (nx >= 0 && nx < N && ny >= 0 && ny < N && board[nx][ny] === 1) {
+  //         DFS(nx, ny);
+  //       }
+  //     }
+  //   };
+
+  const BFS = (x, y) => {
+    const queue = [];
+    board[x][y] = 0;
+    queue.push([x, y]);
+    home++;
+
+    while (queue.length) {
+      const [x, y] = queue.shift();
+
+      for (let k = 0; k < 4; k++) {
+        const [nx, ny] = [x + dx[k], y + dy[k]];
+        if (nx >= 0 && nx < N && ny >= 0 && ny < N && board[nx][ny] === 1) {
+          board[nx][ny] = 0;
+          queue.push([nx, ny]);
+          home++;
+        }
       }
     }
   };
+
+  //   for (let i = 0; i < N; i++) {
+  //     for (let j = 0; j < N; j++) {
+  //       if (board[i][j] === 1) {
+  //         group++;
+  //         DFS(i, j);
+  //         // 한 단지의 순회가 마무리 되었을 때 아파트 수를 넣고 home 초기화
+  //         answer.push(home);
+  //         home = 0;
+  //       }
+  //     }
+  //   }
 
   for (let i = 0; i < N; i++) {
     for (let j = 0; j < N; j++) {
       if (board[i][j] === 1) {
         group++;
-        DFS(i, j);
-        // 한 단지의 순회가 마무리 되었을 때 아파트 수를 넣고 home 초기화
+        BFS(i, j);
         answer.push(home);
         home = 0;
       }
