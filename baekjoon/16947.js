@@ -1,7 +1,41 @@
+class Node {
+  constructor(item) {
+    this.item = item;
+    this.next = null;
+  }
+}
+
+class Queue {
+  constructor() {
+    this.head = null;
+    this.tail = null;
+    this.length = 0;
+  }
+
+  pushNode(item) {
+    const newNode = new Node(item);
+
+    if (this.head == null) {
+      this.head = newNode;
+    } else {
+      this.tail.next = newNode;
+    }
+
+    this.tail = newNode;
+    this.length += 1;
+  }
+
+  shiftNode() {
+    const shiftItem = this.head;
+    this.head = this.head.next;
+    this.length -= 1;
+    return shiftItem.item;
+  }
+}
 const sol = (input) => {
   const [[N], ...relation] = input;
 
-  const visited = Array.from({ length: N + 1 }, () => 0);
+  const visited_DFS = Array.from({ length: N + 1 }, () => 0);
   const graph = Array.from(Array(N + 1), () => Array());
   const checkCycle = Array.from({ length: N + 1 }, () => 0);
   const answer = [];
@@ -18,10 +52,10 @@ const sol = (input) => {
 
     for (let i = 0; i < graph[v].length; i++) {
       const nv = graph[v][i];
-      if (visited[nv] === 0) {
-        visited[nv] = 1;
+      if (visited_DFS[nv] === 0) {
+        visited_DFS[nv] = 1;
         DFS(nv, sv, line + 1);
-        visited[nv] = 0;
+        visited_DFS[nv] = 0;
       } else if (nv === sv && line >= 2) {
         flag = 1;
         checkCycle[sv] = 1;
@@ -30,28 +64,33 @@ const sol = (input) => {
     }
   };
 
-  const BFS = (v, cnt) => {
-    const queue = [];
-    queue.push([v, cnt]);
+  const BFS = (v) => {
+    const queue = new Queue();
+    const visited_BFS = Array.from({ length: N + 1 }, () => 0);
+    visited_BFS[v] = 1;
+
+    queue.pushNode([v, 0]);
 
     while (queue.length) {
-      const [v, cnt] = queue.shift();
+      const [v, cnt] = queue.shiftNode();
       if (checkCycle[v] === 1) {
-        answer.push(cnt);
-        return;
+        return cnt;
       }
 
       for (let i = 0; i < graph[v].length; i++) {
         const nv = graph[v][i];
-        queue.push([nv, cnt + 1]);
+        if (visited_BFS[nv] === 0) {
+          visited_BFS[nv] = 1;
+          queue.pushNode([nv, cnt + 1]);
+        }
       }
     }
   };
 
   for (let i = 1; i <= N; i++) {
-    visited[i] = 1;
+    visited_DFS[i] = 1;
     DFS(i, i, 0);
-    visited[i] = 0;
+    visited_DFS[i] = 0;
     flag = 0;
   }
 
@@ -59,7 +98,7 @@ const sol = (input) => {
     if (checkCycle[i] === 1) {
       answer.push(0);
     } else {
-      BFS(i, 0);
+      answer.push(BFS(i));
     }
   }
 
