@@ -1,12 +1,13 @@
 const sol = (input) => {
   const N = input[0][0];
-  const order = input[input.length - 1];
+  const target = input[input.length - 1];
   input.shift();
   input.pop();
   const relation = input;
 
   const graph = Array.from(Array(N + 1), () => Array());
   const visited = Array.from({ length: N + 1 }, () => 0);
+  const order = Array.from({ length: N + 1 }, () => 0);
 
   const answer = [];
 
@@ -15,18 +16,21 @@ const sol = (input) => {
     graph[b].push(a);
   }
 
-  let sv = order[0];
-  if (sv !== 1) return 0;
+  for (let i = 0; i < N; i++) {
+    const node = target[i];
+    order[node] = i + 1;
+  }
 
   for (let i = 1; i <= N; i++) {
     graph[i].sort((a, b) => {
-      if (order.indexOf(a) < order.indexOf(b)) {
+      if (order[a] < order[b]) {
         return b - a;
-      } else {
-        return a - b;
       }
     });
   }
+
+  let sv = order[1];
+  if (sv !== 1) return 0;
 
   const DFS = (v) => {
     answer.push(v);
@@ -42,7 +46,7 @@ const sol = (input) => {
 
   visited[sv] = 1;
   DFS(sv);
-  return JSON.stringify(answer) === JSON.stringify(order) ? 1 : 0;
+  return JSON.stringify(answer) === JSON.stringify(target) ? 1 : 0;
 };
 
 const input = [];
