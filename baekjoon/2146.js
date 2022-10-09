@@ -1,40 +1,52 @@
 const sol = (input) => {
   const [[N], ...board] = input;
-  const dx = [0, 0, 1, -1];
-  const dy = [1, -1, 0, 0];
+  const dx = [-1, 0, 1, 0];
+  const dy = [0, 1, 0, -1];
 
   let visited = Array.from(Array(N), () => Array(N).fill(0));
-  let islandCnt = 0;
+  let isLandCnt = 0;
 
   function check(x, y) {
     return 0 <= x && x < N && 0 <= y && y < N;
   }
 
-  function DFS(x, y, islandCnt) {
-    visited[x][y] = true;
-    board[x][y] = islandCnt;
+  function BFS_addLandNumber(sx, sy, isLandCnt) {
+    const queue = [];
+    visited[sx][sy] = 1;
+    board[sx][sy] = isLandCnt;
+    queue.push([sx, sy]);
 
-    for (let i = 0; i < 4; i++) {
-      let nx = x + dx[i];
-      let ny = y + dy[i];
-      if (check(nx, ny) && board[nx][ny] && !visited[nx][ny])
-        DFS(nx, ny, islandCnt);
+    while (queue.length) {
+      const [x, y] = queue.shift();
+
+      for (let k = 0; k < 4; k++) {
+        const [nx, ny] = [x + dx[k], y + dy[k]];
+
+        if (check(nx, ny) && board[nx][ny] && !visited[nx][ny]) {
+          visited[nx][ny] = 1;
+          board[nx][ny] = isLandCnt;
+          queue.push([nx, ny]);
+        }
+      }
     }
   }
 
   for (let i = 0; i < N; i++) {
     for (let j = 0; j < N; j++) {
-      if (board[i][j] && !visited[i][j]) DFS(i, j, ++islandCnt);
+      if (board[i][j] && !visited[i][j]) {
+        isLandCnt += 1;
+        BFS_addLandNumber(i, j, isLandCnt);
+      }
     }
   }
 
-  function BFS(islandCnt) {
-    let queue = [];
+  function BFS(isLandCnt) {
+    const queue = [];
     visited = Array.from(Array(N), () => Array(N).fill(0));
 
     for (let i = 0; i < N; i++) {
       for (let j = 0; j < N; j++)
-        if (board[i][j] == islandCnt) {
+        if (board[i][j] == isLandCnt) {
           visited[i][j] = 1;
           queue.push([i, j]);
         }
@@ -54,7 +66,7 @@ const sol = (input) => {
           let ny = y + dy[i];
 
           if (!check(nx, ny)) continue;
-          if (board[nx][ny] !== 0 && board[nx][ny] !== islandCnt) return cnt;
+          if (board[nx][ny] !== 0 && board[nx][ny] !== isLandCnt) return cnt;
           if (board[nx][ny] === 0 && !visited[nx][ny]) {
             visited[nx][ny] = 1;
             queue.push([nx, ny]);
@@ -66,7 +78,7 @@ const sol = (input) => {
   }
 
   let ans = Infinity;
-  for (let i = 1; i <= islandCnt; i++) {
+  for (let i = 1; i <= isLandCnt; i++) {
     ans = Math.min(ans, BFS(i));
   }
 
