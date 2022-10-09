@@ -23,9 +23,7 @@ const sol = (input) => {
 
   for (let i = 1; i <= N; i++) {
     graph[i].sort((a, b) => {
-      if (order[a] < order[b]) {
-        return b - a;
-      }
+      return order[a] - order[b];
     });
   }
 
