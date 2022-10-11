@@ -1,61 +1,51 @@
-const readline = require("readline");
+const sol = (input) => {
+  const [[N], ...relation] = input;
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+  const graph = Array.from({ length: N + 1 }, () => Array());
+  const parent = Array.from({ length: N + 1 }, () => 0);
 
-let N = 0;
-const input = [];
-rl.on("line", (line) => {
-  if (!N) {
-    N = Number(line);
-  } else {
-    input.push(line);
-    if (input.length === N - 1) {
-      main();
-    }
-  }
-});
-
-const main = () => {
-  const graph = [];
-  const answer = [];
-  for (let i = 1; i <= N; i++) {
-    graph[i] = [];
+  for (let [a, b] of relation) {
+    graph[a].push(b);
+    graph[b].push(a);
   }
 
-  input.forEach((edge) => {
-    const [from, to] = edge.split(" ");
-    graph[from].push(to);
-    graph[to].push(from);
-  });
-
-  const bfs = (start) => {
-    const visited = new Array(N);
-    visited[start] = true;
-
-    const queue = [start];
+  const BFS = () => {
+    const queue = [];
+    queue.push(1);
+    parent[1] = 1;
 
     while (queue.length) {
-      const cur = queue.shift();
-      for (let i = 0; i < graph[cur].length; i++) {
-        const next = graph[cur][i];
+      const v = queue.shift();
 
-        if (!visited[next]) {
-          visited[next] = true;
-          answer[next] = cur;
-          queue.push(next);
+      for (let i = 0; i < graph[v].length; i++) {
+        const nv = graph[v][i];
+
+        if (parent[nv] === 0) {
+          parent[nv] = v;
+          queue.push(nv);
         }
       }
     }
   };
 
-  bfs(1);
-  // console.time();
-  // answer.forEach((ans) => console.log(ans));
-  let result = "";
-  answer.forEach((ans) => (result += ans + "\n"));
-  console.log(result);
-  // console.timeEnd();
+  BFS();
+  const answer = parent.slice(2);
+
+  return answer.join(`\n`);
 };
+
+const input = [];
+
+require("readline")
+  .createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  })
+  .on("line", (line) => {
+    input.push(line.split(" ").map((v) => +v));
+
+    if (input.length > input[0][0] - 1) {
+      console.log(sol(input));
+      process.exit();
+    }
+  });
