@@ -11,12 +11,16 @@ const sol = (input) => {
   // 정렬, 정복, 병합 과정
   const merge = (left, right) => {
     const sortedArr = [];
+    let i = 0;
+    let j = 0;
 
-    while (left.length && right.length) {
-      if (left[0] <= right[0]) {
-        sortedArr.push(left.shift());
+    while (i < left.length && j < right.length) {
+      if (left[i] <= right[j]) {
+        sortedArr.push(left[i]);
+        i++;
       } else {
-        sortedArr.push(right.shift());
+        sortedArr.push(right[j]);
+        j++;
       }
       count++;
       if (count === k) target = sortedArr[sortedArr.length - 1];
@@ -24,14 +28,16 @@ const sol = (input) => {
 
     // left, right 둘 중 하나는 요소가 남아있기 때문에 밑에 두 개의 while 문 중 하나만을 실행하게 된다.
     // 이 때 count를 마저 세주면 됨.
-    while (left.length) {
-      sortedArr.push(left.shift());
+    while (i < left.length) {
+      sortedArr.push(left[i]);
+      i++;
       count++;
       if (count === k) target = sortedArr[sortedArr.length - 1];
     }
 
-    while (right.length) {
-      sortedArr.push(right.shift());
+    while (j < right.length) {
+      sortedArr.push(right[j]);
+      j++;
       count++;
       if (count === k) target = sortedArr[sortedArr.length - 1];
     }
