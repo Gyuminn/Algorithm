@@ -1,6 +1,6 @@
 function solution(stones, k) {
   let lt = 1;
-  let rt = Math.max(...stones);
+  let rt = 200000000;
 
   const test = (stones, k, mid) => {
     let cnt = 0;
