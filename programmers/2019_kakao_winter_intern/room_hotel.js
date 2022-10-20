@@ -1,35 +1,17 @@
 const solution = (k, room_number) => {
   const map = new Map();
-  const result = [];
 
-  let visited = [];
-
-  for (let room of room_number) {
-    //방이 비어 있는 경우
+  const findRoom = (room) => {
     if (!map.has(room)) {
-      result.push(room);
       map.set(room, room + 1);
-      continue;
+      return room;
     }
 
-    // 방이 차있는 경우 빈 방이 나올때 까지 부모 노드 찾기
-    visited = [];
-    visited.push(room);
+    // 재귀 함수를 통해 다음 노드를 찾는다.
+    let next = findRoom(map.get(room));
+    map.set(room, next + 1);
+    return next;
+  };
 
-    let parent = map.get(room);
-
-    while (map.has(parent)) {
-      visited.push(parent);
-      parent = map.get(parent);
-    }
-
-    result.push(parent);
-    map.set(parent, parent + 1);
-
-    for (let visitRoom of visited) {
-      map.set(visitRoom, parent + 1);
-    }
-  }
-
-  return result;
+  return room_number.map((room) => findRoom(room));
 };
