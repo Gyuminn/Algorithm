@@ -1,6 +1,4 @@
 const sol = (num) => {
-  const result = [];
-
   let recursiveFibCnt = 0;
   let dynamicFibCnt = 0;
 
