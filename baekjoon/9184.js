@@ -3,7 +3,7 @@ const sol = (input) => {
 
   let memo = [];
 
-  // 3차원 배열 구현 방법 중 하
+  // 3차원 배열 구현 방법 중 하나
   for (let i = 0; i <= 101; i++) {
     memo[i] = [];
     for (let j = 0; j <= 101; j++) {
