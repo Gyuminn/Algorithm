@@ -2,42 +2,31 @@ const sol = (input) => {
   const [[N], ...cases] = input;
   const answer = [];
 
-  let visited = Array.from({ length: 10000 }, () => 0);
-  let queue = [];
-
   const cmds = {
     D: function (num) {
-      if (num * 2 > 9999) {
-        return (num * 2) % 10000;
-      }
-      return num * 2;
+      return (num * 2) % 10000;
     },
 
     S: function (num) {
-      if (num - 1 == 0) {
-        return 9999;
-      }
-      return num - 1;
+      return num == 0 ? 9999 : num - 1;
     },
 
     L: function (num) {
-      num = num.toString();
-      return Number(num.slice(1) + num[0]);
+      return (num % 1000) * 10 + Math.floor(num / 1000);
     },
 
     R: function (num) {
-      num = num.toString();
-      return Number(num[num.length - 1] + num.slice(0, num.length - 1));
+      return (num % 10) * 1000 + Math.floor(num / 10);
     },
   };
 
   const bfs = (test) => {
     const [A, B] = test;
 
-    visited = Array.from({ length: 10000 }, () => 0);
+    let visited = Array.from({ length: 10000 }, () => 0);
     visited[A] = 1;
 
-    queue = [];
+    let queue = [];
     queue.push([A, ""]);
 
     while (queue.length) {
