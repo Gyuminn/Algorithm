@@ -1,33 +1,52 @@
 const sol = (input) => {
-  const N = +input[0];
-  const S = input[1].split(" ").map(Number);
-  const MAX_SUM = 2000001;
-  const sumArr = new Array(MAX_SUM).fill(0);
-  const pick = [];
+  const [[N], ...[sequence]] = input;
 
-  function dfs(L) {
-    if (L === N) {
-      const sum = pick.reduce((sum, val) => sum + val, 0);
-      sumArr[sum] = 1;
+  const partSumOfSequence = Array.from({ length: 2000001 });
+
+  const partOfSequence = [];
+
+  const dfs = (L, S, leaf) => {
+    if (L === leaf) {
+      let sum = partOfSequence.reduce((acc, cur) => acc + cur, 0);
+      if (!partSumOfSequence[sum]) {
+        partSumOfSequence[sum] = 1;
+      }
       return;
+    } else {
+      for (let i = S; i < sequence.length; i++) {
+        partOfSequence.push(sequence[i]);
+        dfs(L + 1, i + 1, leaf);
+        partOfSequence.pop();
+      }
     }
-    pick.push(S[L]);
-    dfs(L + 1);
-    pick.pop();
-    dfs(L + 1);
-  }
-  dfs(0);
+  };
 
-  for (let i = 1; i < MAX_SUM; i++) if (!sumArr[i]) return i;
+  for (let i = 1; i <= N; i++) {
+    dfs(0, 0, i);
+  }
+
+  let answer;
+  for (let i = 1; i < partSumOfSequence.length; i++) {
+    if (!partSumOfSequence[i]) {
+      answer = i;
+      break;
+    }
+  }
+
+  return answer;
 };
 
 const input = [];
 require("readline")
-  .createInterface(process.stdin, process.stdout)
-  .on("line", (line) => {
-    input.push(line);
+  .createInterface({
+    input: process.stdin,
+    output: process.stdout,
   })
-  .on("close", () => {
-    console.log(sol(input));
-    process.exit();
+  .on("line", (line) => {
+    input.push(line.split(" ").map((v) => +v));
+
+    if (input.length == 2) {
+      console.log(sol(input));
+      process.exit();
+    }
   });
