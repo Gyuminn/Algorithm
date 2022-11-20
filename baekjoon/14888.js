@@ -3,6 +3,7 @@ const sol = (input) => {
   const nums = input[1];
   const operators = input[2];
 
+  // ~~ 대신 Math.trunc()를 이용해도 된다.
   const calc = [
     (a, b) => a + b,
     (a, b) => a - b,

@@ -1,48 +1,49 @@
 const sol = (input) => {
-  const N = +input[0];
-  const numbers = input[1].split(" ").map(Number);
-  const operator = input[2].split(" ").map(Number);
-  const operObj = {
-    0: (oper1, oper2) => oper1 + oper2,
-    1: (oper1, oper2) => oper1 - oper2,
-    2: (oper1, oper2) => oper1 * oper2,
-    3: (oper1, oper2) => {
-      if (oper1 < 0) {
-        return -Math.floor(-oper1 / oper2);
-      }
-      return Math.floor(oper1 / oper2);
-    },
-  };
+  const N = input[0][0];
+  const nums = input[1];
+  const operators = input[2];
+
+  const calc = [
+    (a, b) => a + b,
+    (a, b) => a - b,
+    (a, b) => a * b,
+    (a, b) => ~~(a / b),
+  ];
 
   let min = Number.MAX_SAFE_INTEGER;
   let max = Number.MIN_SAFE_INTEGER;
-  function dfs(L, temp) {
+
+  const dfs = (L, temp) => {
     if (L === N - 1) {
-      min = Math.min(min, temp);
       max = Math.max(max, temp);
+      min = Math.min(min, temp);
       return;
+    } else {
+      for (let i = 0; i < 4; i++) {
+        if (!operators[i]) continue;
+        operators[i]--;
+        dfs(L + 1, calc[i](temp, nums[L + 1]));
+        operators[i]++;
+      }
     }
+  };
 
-    for (let i = 0; i < 4; i++) {
-      if (!operator[i]) continue;
-      operator[i] -= 1;
-      const nextTemp = operObj[i](temp, numbers[L + 1]);
-      dfs(L + 1, nextTemp);
-      operator[i] += 1;
-    }
-  }
-  dfs(0, numbers[0]);
+  dfs(0, nums[0]);
+  let answer = [];
+  answer.push(max);
+  answer.push(min);
 
-  return `${max}\n${min}`;
+  return answer.join(`\n`);
 };
 
 const input = [];
 require("readline")
-  .createInterface(process.stdin, process.stdout)
+  .createInterface({ input: process.stdin, output: process.stdout })
   .on("line", (line) => {
-    input.push(line);
-  })
-  .on("close", () => {
-    console.log(sol(input));
-    process.exit();
+    input.push(line.split(" ").map((v) => +v));
+
+    if (input.length == 3) {
+      console.log(sol(input));
+      process.exit();
+    }
   });
