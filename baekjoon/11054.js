@@ -1,44 +1,48 @@
-const readline = require("readline");
+const sol = (input) => {
+  const [[N], ...[seqeunce]] = input;
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
-
-const input = [];
-
-rl.on("line", (line) => {
-  input.push(line);
-}).on("close", () => {
-  const [, arr] = input;
-  const nums = arr.split(" ").map(Number);
-  const N = nums.length;
-
-  const upMemo = new Array(N).fill(1); // LIS
-  const downMemo = new Array(N).fill(1); // LDS
+  const LIS_DP = Array.from({ length: N });
+  const LDS_DP = Array.from({ length: N });
 
   for (let i = 0; i < N; i++) {
-    for (let j = 0; j < i; j++) {
-      if (nums[j] < nums[i] && upMemo[i] < upMemo[j] + 1) {
-        upMemo[i] = upMemo[j] + 1;
+    let LIS_MAX = 0;
+    for (let j = i; j >= 0; j--) {
+      if (seqeunce[j] < seqeunce[i] && LIS_MAX < LIS_DP[j]) {
+        LIS_MAX = LIS_DP[j];
       }
     }
+    LIS_DP[i] = LIS_MAX + 1;
   }
 
   for (let i = N - 1; i >= 0; i--) {
-    for (let j = N - 1; j > i; j--) {
-      if (nums[j] < nums[i] && downMemo[i] < downMemo[j] + 1) {
-        downMemo[i] = downMemo[j] + 1;
+    let LDS_MAX = 0;
+    for (let j = i; j < N; j++) {
+      if (seqeunce[j] < seqeunce[i] && LDS_MAX < LDS_DP[j]) {
+        LDS_MAX = LDS_DP[j];
       }
     }
+    LDS_DP[i] = LDS_MAX + 1;
   }
 
-  let max = 0;
+  let answer = 0;
   for (let i = 0; i < N; i++) {
-    max = Math.max(max, upMemo[i] + downMemo[i]);
+    answer = Math.max(answer, LIS_DP[i] + LDS_DP[i]);
   }
+  return answer - 1;
+};
 
-  console.log(max - 1);
+const input = [];
 
-  process.exit();
-});
+require("readline")
+  .createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  })
+  .on("line", (line) => {
+    input.push(line.split(" ").map((v) => +v));
+
+    if (input.length === 2) {
+      console.log(sol(input));
+      process.exit();
+    }
+  });
