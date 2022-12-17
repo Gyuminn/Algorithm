@@ -28,6 +28,10 @@ const sol = (input) => {
     }
 
     const idx = binarySearch(result, compareValue);
+    // 이 문제에서는 길이를 구하는 것이 관건이다.
+    // 따라서 실제로는 LIS에 맞는 배열이 나오지 않을 수 있다.
+    // 수열을 구하고자 한다면 다른 방법을 써야 한다.
+    // 14003.js 풀이 방법 참고
     result[idx] = compareValue;
   }
 
