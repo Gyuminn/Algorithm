@@ -1,46 +1,49 @@
-const readline = require("readline");
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+const sol = (input) => {
+  const [[N], ...[arr]] = input;
+  const result = [arr[0]];
 
-function binarySearch(result, input, i) {
-  let left = 0;
-  let right = result.length - 1;
+  const binarySearch = (result, arr, i) => {
+    let left = 0;
+    let right = result.length - 1;
 
-  while (left < right) {
-    const mid = parseInt((left + right) / 2);
-    if (result[mid] < input[1][i]) {
-      left = mid + 1;
-    } else if (result[mid] > input[1][i]) {
-      right = mid;
-    } else {
-      return mid;
+    while (left < right) {
+      const mid = Math.floor((left + right) / 2);
+      if (result[mid] < arr[i]) {
+        left = mid + 1;
+      } else if (result[mid] > arr[i]) {
+        right = mid;
+      } else {
+        return mid;
+      }
     }
-  }
-  return right;
-}
-const input = [];
-let count = 2;
+    return right;
+  };
 
-rl.on("line", function (line) {
-  input.push(line.split(" ").map((v) => parseInt(v)));
-  count--;
-  if (count === 0) rl.close();
-}).on("close", function () {
-  const n = input[0];
-  const result = [input[1][0]];
-
-  for (let i = 1; i < n; i++) {
-    if (result[result.length - 1] < input[1][i]) {
-      result.push(input[1][i]);
+  for (let i = 1; i < N; i++) {
+    if (result[result.length - 1] < arr[i]) {
+      result.push(arr[i]);
       continue;
     }
 
-    const idx = binarySearch(result, input, i);
-    result[idx] = input[1][i];
+    const idx = binarySearch(result, arr, i);
+    result[idx] = arr[i];
   }
 
-  console.log(result.length);
-  process.exit();
-});
+  return result.length;
+};
+
+const input = [];
+
+require("readline")
+  .createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  })
+  .on("line", (line) => {
+    input.push(line.split(" ").map((v) => +v));
+
+    if (input.length === 2) {
+      console.log(sol(input));
+      process.exit();
+    }
+  });
