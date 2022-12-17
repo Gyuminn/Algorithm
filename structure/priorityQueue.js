@@ -1,4 +1,4 @@
-class PriorityQueue extends Heap {
+class PriorityQueue extends MinHeap {
   constructor() {
     super();
   }
