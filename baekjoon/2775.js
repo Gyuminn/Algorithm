@@ -33,6 +33,7 @@ function closeHandler() {
     for (let i = 0; i < room; i++) {
       apartment[0][i] = i + 1;
     }
+    console.table(apartment);
 
     for (let i = 1; i <= floor; i++) {
       for (let j = 1; j < room; j++) {
@@ -40,7 +41,7 @@ function closeHandler() {
       }
     }
     // console.table(apartment);
-    console.log(apartment[floor][room - 1]);
+    console.table(apartment[floor][room - 1]);
   }
 
   process.exit();
