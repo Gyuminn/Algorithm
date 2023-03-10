@@ -7,7 +7,7 @@ const reader = readline.createInterface({
 
 reader.on('line', function (line) {
     const input = line.split(' ');
-
+    console.log('hi');
     const result = Number(input[0]) - Number(input[1]);
     console.log(result);
 
